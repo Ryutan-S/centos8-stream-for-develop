@@ -3,5 +3,7 @@ services:
   centos:
     build: .
     volumes: 
-      - ./home:/home/user:delegated
+      - user_home:/home/user
     tty: true
+volumes: 
+  user_home:
