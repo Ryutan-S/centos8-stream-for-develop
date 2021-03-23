@@ -12,3 +12,4 @@ services:
     tty: true
 volumes: 
   user_home:
+    name: user_home
