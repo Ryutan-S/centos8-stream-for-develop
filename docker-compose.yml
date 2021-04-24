@@ -3,7 +3,13 @@ services:
   centos:
     build: .
     volumes: 
-      - user_home:/home/user
+      - type: volume
+        source: user_home
+        target: /home/user/
+      - type: bind
+        source: ./mounted/
+        target: /home/user/mount_host/
     tty: true
 volumes: 
   user_home:
+    name: user_home

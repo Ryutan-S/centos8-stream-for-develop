@@ -27,13 +27,24 @@ RUN ["dnf","install","-y","fish"]
 WORKDIR /root/
 
 # Install the development tools 
-RUN ["dnf","install","-y","git","which","unzip","zip"]
+RUN ["dnf","install","-y","git","which","unzip","zip","subversion"]
 
 # Install the golang
 RUN ["curl","-fsSLO","https://golang.org/dl/go1.15.7.linux-amd64.tar.gz"]
 RUN ["tar","-C","/usr/local","-xzf","go1.15.7.linux-amd64.tar.gz"]
 RUN ["bash","-c","echo 'export PATH=$PATH:/usr/local/go/bin' >> /etc/profile"]
 RUN ["rm","go1.15.7.linux-amd64.tar.gz"]
+
+# Install the alien to install pandoc
+RUN ["dnf","install","-y","rpm-build","perl-ExtUtils-MakeMaker","make","perl"]
+RUN ["curl","-fsSLO","http://ftp.debian.org/debian/pool/main/a/alien/alien_8.92.tar.gz"]
+RUN ["sudo","rpmbuild","-ta","alien_8.92.tar.gz"]
+RUN ["rpm","-ivh","/root/rpmbuild/RPMS/noarch/alien-8.92-1.noarch.rpm"]
+
+# Install the pandoc
+RUN ["curl","-fsSLO","https://github.com/jgm/pandoc/releases/download/2.13/pandoc-2.13-1-amd64.deb"]
+RUN ["alien","--to-rpm","--scripts","pandoc-2.13-1-amd64.deb"]
+RUN ["sudo","rpm","-ivh","--force","pandoc-2.13-2.x86_64.rpm"]
 
 # Configuration for login
 USER user
